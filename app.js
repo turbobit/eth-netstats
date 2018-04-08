@@ -29,7 +29,32 @@ else
 	}
 }
 
-var banned = require('./lib/utils/config').banned;
+var config = {};
+try {
+	config = require('./config');
+}
+catch (e)
+{
+	if( e.code === 'MODULE_NOT_FOUND')
+	{
+		console.log("WARNING: No config.js file found. use default config.js found at lib/utils/config.js...");
+	}
+	else
+	{
+		throw e;
+		process.exit(1);
+	}
+
+	try {
+		config = require('./lib/utils/config');
+	}
+	catch (e)
+	{
+		throw e;
+		process.exit(1);
+	}
+}
+var banned = config.banned;
 
 // Init http server
 if( process.env.NODE_ENV !== 'production' )
